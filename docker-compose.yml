@@ -1,0 +1,109 @@
+version: '3'
+
+networks:
+  dev_mariadb_network:
+  webserver_proxy_network:
+  ws2_proxy_network:
+
+services:
+  api-webserver:
+    ports:
+      - "9005:9005"
+    working_dir: /var/www/html
+    image: maxeo90/web-dev:web-dev-php-8-0-base
+    # docker pull maxeo90/web-dev:web-dev-php-8-0-base
+    #build:
+    #  context: ./
+    #  dockerfile: dockerconfig/webserver/Dockerfile
+    volumes:
+      - ./api-webserver:/var/www/html
+      - ./dockerconfig/api-webserver/php/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
+      - ./dockerconfig/api-webserver/docker-run:/docker-run
+      #exclude vendor directory
+      - /var/www/html/vendor
+      # vendor to sync
+      - ./api-webserver/vendor:/docker-hidden/vendor
+    environment:
+      TZ: '${TZ}'
+      APP_NAME: '${APP_NAME}'
+      APP_PORT: '${APP_PORT}'
+      APP_SECRET: '${APP_SECRET}'
+      APP_ENV: '${APP_ENV}'
+      APP_KEY: '${APP_KEY}'
+      APP_DEBUG: '${APP_DEBUG}'
+      APP_URL: '${APP_URL}'
+      APP_PROXY_SCHEMA: '${APP_PROXY_SCHEMA}'
+      LOG_CHANNEL: '${LOG_LEVEL}'
+      DB_CONNECTION: '${DB_CONNECTION}'
+      DB_HOST: '${DB_HOST}'
+      DB_PORT: '${DB_PORT}'
+      DB_DATABASE: '${DB_DATABASE}'
+      DB_USERNAME: '${DB_USERNAME}'
+      DB_PASSWORD: '${DB_PASSWORD}'
+      SYNC_LIB: '${APP_SYNC_LIB}'
+      XDEBUG_CONFIG: 'remote_host=host.docker.internal'
+    networks:
+      - dev_mariadb_network
+      - webserver_proxy_network
+
+  app-vue:
+    working_dir: /usr/src/app
+    image: maxeo90/nodejs:v-16-vue-php
+    # docker pull maxeo90/nodejs:v-16-vue-php
+    #build:
+    #  context: ./
+    #  dockerfile: dockerconfig/app-vue/Dockerfile
+    volumes:
+      - ./app-vue:/usr/src/app
+      - ./dockerconfig/app-vue/docker-run:/docker-run
+      #exclude vendor directory
+      - /usr/src/app/node_modules
+      # vendor to sync
+      - ./app-vue/node_modules:/docker-hidden/node_modules
+    environment:
+      TZ: '${TZ}'
+      VUE_ENV: '${VUE_ENV}'
+      VUE_URL: '${VUE_URL}'
+      VUE_API_URL: '${VUE_API_URL}'
+      SYNC_LIB: '${VUE_SYNC_LIB}'
+    networks:
+      - ws2_proxy_network
+
+  db:
+    image: mariadb:10.5.9
+    volumes:
+      - ./mariadb:/var/lib/mysql
+      #- ./dockerconfig/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - '${DB_PORT}:3306'
+    networks:
+      - dev_mariadb_network
+    environment:
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASS}'
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_PASSWORD: '${MYSQL_PASS}'
+      MYSQL_DATABASE: '${MYSQL_DB}'
+      TZ: '${TZ}'
+
+
+  reverse_proxy:
+    image: maxeo90/reverse-proxy
+    #docker pull maxeo90/reverse-proxy
+    #build:
+    #  context: ./
+    #  dockerfile: dockerconfig/reverse_proxy/Dockerfile
+    volumes:
+      - ./dockerconfig/reverse_proxy/cert/docker:/dockerconfig/cert
+      - ./dockerconfig/reverse_proxy/cert/letsencrypt:/etc/letsencrypt
+      - ./dockerconfig/reverse_proxy/apache/sites-available/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./dockerconfig/reverse_proxy/docker-run:/docker-run
+    environment:
+      RP_PORT_FROM: '${RP_PORT_FROM}'
+      RP_PORT_FROM_SSL: '${RP_PORT_FROM_SSL}'
+      TZ: '${TZ}'
+    networks:
+      - webserver_proxy_network
+      - ws2_proxy_network
+    ports:
+      - "${RP_PORT_FROM}:80"
+      - "${RP_PORT_FROM_SSL}:443"

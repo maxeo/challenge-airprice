@@ -1,0 +1,38 @@
+[
+  {
+    "domain": "api-webserver.docker.local",
+    "host": "api-webserver",
+    "port": "3000",
+    "https_only": true,
+    "certbot": false,
+    "certbot_mail": "certbot@maxeo.net",
+    "alias": []
+  },
+  {
+    "domain": "app-vue.docker.local",
+    "host": "app-vue",
+    "port": "8080",
+    "https_only": true,
+    "certbot": false,
+    "certbot_mail": "certbot@maxeo.net",
+    "alias": []
+  },
+  {
+    "domain": "app-vue-ui.docker.local",
+    "host": "app-vue",
+    "port": "8000",
+    "https_only": true,
+    "certbot": false,
+    "certbot_mail": "certbot@maxeo.net",
+    "alias": []
+  },
+  {
+    "domain": "app-vue-dist.docker.local",
+    "host": "app-vue",
+    "port": "5000",
+    "https_only": true,
+    "certbot": false,
+    "certbot_mail": "certbot@maxeo.net",
+    "alias": []
+  }
+]

@@ -1,0 +1,6 @@
+# FOR XDEBUG PROFILER USE TRIGGER
+/?XDEBUG_TRIGGER=1
+
+# GIT FIX
+git config --global core.autocrlf false
+git config --global core.eol lf
