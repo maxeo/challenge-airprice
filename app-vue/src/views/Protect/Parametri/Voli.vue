@@ -13,7 +13,7 @@
       <main class="content">
         <div class="container-fluid p-0">
 
-          <h1 class="h3 mb-3"><strong>Gestione Parametri Preventivi</strong> - Voli</h1>
+          <h1 class="h3 mb-3"><strong>Gestione Parametri</strong> - Voli</h1>
           <div class="row">
             <div class="col-12 d-flex">
               <div class="w-100">
@@ -24,10 +24,10 @@
 
                         <div class="col-12">
                           <Crud
-                              v-if="info?.user_permissions?.indexOf('preventivi/parameters/list') > -1"
+                              v-if="info?.user_permissions?.indexOf('airports/flights-manage/list') > -1"
 
-                              resource_prefix="preventivi/parameters/paper"
-                              permission_prefix="preventivi/parameters"
+                              resource_prefix="airport/crud/flight"
+                              permission_prefix="airports/flights-manage"
                               :resource_data="resource_data"
 
                               :info="info"
@@ -77,8 +77,19 @@ export default {
         title: 'Voli',
         list_map: [
           {source: 'id', name: 'ID', class: 'fw-bold',},
-          {source: 'name', name: 'Nome'},
-          {source: 'cost_mq', name: 'Costo al m²'},
+          {
+            source: 'departure', name: 'Aeroporto di Partenza', body_f: aeroporto => {
+              return aeroporto.name;
+            }
+          },
+          {
+            source: 'arrival', name: 'Aeroporto di Arrivo', body_f: aeroporto => {
+              return aeroporto.name;
+            }
+          },
+          {source: 'price', name: 'Costo del Biglietto',body_f: price => {
+              return (price*1).toLocaleString('it-IT', {style: 'currency', currency: 'EUR'});
+            }},
         ]
       }
 

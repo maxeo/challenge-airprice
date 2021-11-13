@@ -1,7 +1,7 @@
 <template>
   <nav id="sidebar" class="sidebar js-sidebar" :class="collapsed?'collapsed':''">
     <div class="sidebar-content js-simplebar">
-      <router-link class="sidebar-brand" :to="$router.getByName('admin-dashboard')">
+      <router-link class="sidebar-brand" :to="$router.getByName('home-page')">
         <div class="sidebar_logo">
           <img :src="require('../assets/plane-inline.svg')" alt="Punto Etichette">
         </div>

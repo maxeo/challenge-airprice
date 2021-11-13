@@ -2,6 +2,7 @@
 
 namespace App\Models\Airport;
 
+use App\Http\Traits\WebsiteTrait;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,10 +26,69 @@ use Illuminate\Support\Facades\DB;
  */
 class Flight extends Model
 {
-    use HasFactory;
+    use HasFactory, WebsiteTrait;
 
+    public static array $form = [
+        [
+            'name' => 'id',
+            'label' => 'ID',
+            'primary' => true,
+        ],
+        [
+            'name' => 'departure',
+            'hidden' => false,
+            'relation' => true,
+            'with' => ['code', 'name'],
+            'relation_info' => [
+                'select_model' => Airport::class,
+                'method_select' => null,
+                'model_update' => Flight::class,
+                'method_update_key' => 'code_departure',
+                'method_update' => null,
+            ],
+            'render' => [
+                'type' => 'select',
+                'multiple' => false,
+                'label' => 'Aeroporto di Partenza',
+                'key' => 'code',
+                'option' => 'name',
+            ],
+        ],
+        [
+            'name' => 'arrival',
+            'hidden' => false,
+            'relation' => true,
+            'with' => ['code', 'name'],
+            'relation_info' => [
+                'select_model' => Airport::class,
+                'method_select' => null,
+                'model_update' => Flight::class,
+                'method_update_key' => 'code_arrival',
+                'method_update' => null,
+            ],
+            'render' => [
+                'type' => 'select',
+                'multiple' => false,
+                'label' => 'Aeroporto di Arrivo',
+                'key' => 'code',
+                'option' => 'name',
+            ],
+        ],
+        [
+            'name' => 'price',
+            'render' => [
+                'type' => 'text',
+                'label' => 'Costo del Biglietto',
+                'required' => true,
+            ],
+        ],
+    ];
     public $timestamps = false;
-
+    protected $fillable = [
+        'code_departure',
+        'code_arrival',
+        'price',
+    ];
 
     /**
      * @param string $code_departure
@@ -81,4 +141,15 @@ class Flight extends Model
         return $query->get();
 
     }
+
+    protected function departure()
+    {
+        return $this->belongsTo(Airport::class, 'code_departure', 'code');
+    }
+
+    protected function arrival()
+    {
+        return $this->belongsTo(Airport::class, 'code_arrival', 'code');
+    }
+
 }

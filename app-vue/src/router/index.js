@@ -18,7 +18,7 @@ const routes = [
         component: () => import( '@/views/Protect/Dashboard')
     },
 
-    //////Gestione Parametri Preventivi
+    //////Gestione Parametri
     {
         path: '/parametri/aeroporti',
         name: 'parametri-aeroporti',

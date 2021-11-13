@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Models\Airport\Airport;
 use Illuminate\Database\Eloquent\Collection;
 use JetBrains\PhpStorm\Pure;
 
@@ -38,7 +39,7 @@ trait WebsiteTrait
      * @param bool $show_relation
      * @return array
      */
-    public static function getCollectionsStandardColumns(string|array $extra, bool $show_relation = false): array
+    public static function getCollectionsStandardColumns(string|array $extra = [], bool $show_relation = false): array
     {
         $collection = self::all();
         $res = [];
@@ -46,37 +47,6 @@ trait WebsiteTrait
             $res[] = $item->getStandardColumns($extra, $show_relation);
         }
         return $res;
-
-    }
-
-    public static function standardRelationList(): array
-    {
-        $relations = self::standardRelationInfo();
-        $r = [];
-        foreach ($relations as $rel_name => $rel_data) {
-            if (empty($rel_data['relation_info']['method_select'])) {
-                $r[$rel_name] = $rel_data['relation_info']['select_model']::select($rel_data['with'] ?? '*')->orderBy('id')->get()->toArray();
-            }
-        }
-
-        return $r;
-
-    }
-
-    public static function standardRelationInfo()
-    {
-        if (property_exists(self::class, 'form')) {
-            $form = self::$form;
-            $r = [];
-            foreach ($form as $el) {
-                if ((isset($el['relation']) && $el['relation'] === true)) {
-                    $r[$el['name']] = $el;
-                }
-            }
-        } else {
-            $r = [];
-        }
-        return $r;
 
     }
 
@@ -174,6 +144,37 @@ trait WebsiteTrait
             $r = [];
         }
         return $r;
+    }
+
+    public static function standardRelationList(): array
+    {
+        $relations = self::standardRelationInfo();
+        $r = [];
+        foreach ($relations as $rel_name => $rel_data) {
+            if (empty($rel_data['relation_info']['method_select'])) {
+                $r[$rel_name] = $rel_data['relation_info']['select_model']::select($rel_data['with'] ?? '*')->orderBy('id')->get()->toArray();
+            }
+        }
+
+        return $r;
+
+    }
+
+    public static function standardRelationInfo()
+    {
+        if (property_exists(self::class, 'form')) {
+            $form = self::$form;
+            $r = [];
+            foreach ($form as $el) {
+                if ((isset($el['relation']) && $el['relation'] === true)) {
+                    $r[$el['name']] = $el;
+                }
+            }
+        } else {
+            $r = [];
+        }
+        return $r;
+
     }
 
     public function updateStandardColumns($updata_data)

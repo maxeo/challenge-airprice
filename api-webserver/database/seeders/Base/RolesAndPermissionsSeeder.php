@@ -28,6 +28,21 @@ class RolesAndPermissionsSeeder extends Seeder
 
         //# Airport
 
+        Permission::create(['name' => 'airports/airports-manage/menu']);
+        Permission::create(['name' => 'airports/airports-manage/view']);
+        Permission::create(['name' => 'airports/airports-manage/list']);
+        Permission::create(['name' => 'airports/airports-manage/update']);
+        Permission::create(['name' => 'airports/airports-manage/add']);
+        Permission::create(['name' => 'airports/airports-manage/delete']);
+
+        Permission::create(['name' => 'airports/flights-manage/menu']);
+        Permission::create(['name' => 'airports/flights-manage/view']);
+        Permission::create(['name' => 'airports/flights-manage/list']);
+        Permission::create(['name' => 'airports/flights-manage/update']);
+        Permission::create(['name' => 'airports/flights-manage/add']);
+        Permission::create(['name' => 'airports/flights-manage/delete']);
+
+
         //#User and permission manage
         Permission::create(['name' => 'users-manage/menu']);
         Permission::create(['name' => 'users-manage/view']);
@@ -61,6 +76,18 @@ class RolesAndPermissionsSeeder extends Seeder
             'profile/menu',
             'profile/view',
             'profile/update',
+            'airports/airports-manage/menu',
+            'airports/airports-manage/view',
+            'airports/airports-manage/list',
+            'airports/airports-manage/update',
+            'airports/airports-manage/add',
+            'airports/airports-manage/delete',
+            'airports/flights-manage/menu',
+            'airports/flights-manage/view',
+            'airports/flights-manage/list',
+            'airports/flights-manage/update',
+            'airports/flights-manage/add',
+            'airports/flights-manage/delete',
         ]);
 
         // super-admin

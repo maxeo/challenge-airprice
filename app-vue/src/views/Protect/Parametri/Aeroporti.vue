@@ -24,10 +24,10 @@
 
                         <div class="col-12">
                           <Crud
-                              v-if="info?.user_permissions?.indexOf('preventivi/parameters/list') > -1"
+                              v-if="info?.user_permissions?.indexOf('airports/airports-manage/list') > -1"
 
-                              resource_prefix="preventivi/parameters/paper"
-                              permission_prefix="preventivi/parameters"
+                              resource_prefix="airport/crud/airport"
+                              permission_prefix="airports/airports-manage"
                               :resource_data="resource_data"
 
                               :info="info"
@@ -78,7 +78,9 @@ export default {
         list_map: [
           {source: 'id', name: 'ID', class: 'fw-bold',},
           {source: 'name', name: 'Nome'},
-          {source: 'cost_mq', name: 'Costo al m²'},
+          {source: 'code', name: 'Codice'},
+          {source: 'lat', name: 'Latitudine'},
+          {source: 'lng', name: 'Longitudine'},
         ]
       }
 

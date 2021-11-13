@@ -21,7 +21,7 @@ class WebsiteNavigationSeeder extends Seeder
     {
 
 
-        //BASE
+        // Base
 
         WebsiteNavigation::create([
             'title' => 'Dashboard',
@@ -32,8 +32,29 @@ class WebsiteNavigationSeeder extends Seeder
             'permission_id' => Permission::where('name', 'dashboard/menu')->first()->id,
         ]);
 
+        // Voli e Aeroporti
 
-        //Utenti
+        WebsiteNavigation::create([
+            'title' => 'Gestione Aeroporti',
+            'link' => 'parametri-aeroporti',
+            'icon' => 'fas fa-plane',
+            'position' => 100,
+            'group_id' => WebsiteNavigationGroup::where('name', 'Voli e Aeroporti')->first()->id,
+            'permission_id' => Permission::where('name', 'airports/airports-manage/menu')->first()->id,
+        ]);
+
+        WebsiteNavigation::create([
+            'title' => 'Gestione Voli',
+            'link' => 'parametri-voli',
+            'icon' => 'fas fa-plane-departure',
+            'position' => 100,
+            'group_id' => WebsiteNavigationGroup::where('name', 'Voli e Aeroporti')->first()->id,
+            'permission_id' => Permission::where('name', 'airports/flights-manage/menu')->first()->id,
+        ]);
+
+
+
+        // Utenti
         WebsiteNavigation::create([
             'title' => 'Gestione Utenti',
             'link' => 'admin-gestione-utenti',

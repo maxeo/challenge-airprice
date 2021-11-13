@@ -2,6 +2,7 @@
 
 namespace App\Models\Airport;
 
+use App\Http\Traits\WebsiteTrait;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,7 +28,63 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Airport extends Model
 {
-    use HasFactory;
+    use HasFactory, WebsiteTrait;
+
+    /**
+     * @var array|array[]
+     */
+    public static array $form = [
+        [
+            'name' => 'id',
+            'label' => 'ID',
+            'primary' => true,
+        ],
+        [
+            'name' => 'name',
+            'render' => [
+                'type' => 'text',
+                'label' => 'Nome',
+                'required' => true,
+            ],
+        ],
+        [
+            'name' => 'code',
+            'render' => [
+                'type' => 'text',
+                'label' => 'Codice',
+                'required' => true,
+            ],
+        ],
+        [
+            'name' => 'lat',
+            'render' => [
+                'type' => 'text',
+                'label' => 'Latitudine',
+                'required' => true,
+            ],
+        ],
+        [
+            'name' => 'lng',
+            'render' => [
+                'type' => 'text',
+                'label' => 'Longitudine',
+                'required' => true,
+            ],
+        ],
+
+    ];
+    /**
+     * @var bool
+     */
     public $timestamps = false;
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'code',
+        'lat',
+        'lng',
+    ];
 
 }

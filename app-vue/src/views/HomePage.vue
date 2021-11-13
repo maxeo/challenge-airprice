@@ -77,7 +77,7 @@
 
 <script>
 import {apiFetch, setTitle} from "../helper/utility";
-import ModalShow from "../components/Preventivi/ModalShow";
+import ModalShow from "../components/Prenotazioni/ModalShow";
 import Loader from "../components/Loader";
 import ModalAlert from "../components/ModalAlert";
 

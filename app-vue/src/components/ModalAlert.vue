@@ -59,7 +59,12 @@ export default {
   methods: {
     closeModal() {
       if (this.close_callback) {
-        this.close_callback();
+        if (typeof this.close_callback === 'function') {
+          this.close_callback();
+        } else {
+          this.$emit('close_callback')
+        }
+
       }
       this.$emit('remove-unused-modal-alert');
       this.$emit('close');

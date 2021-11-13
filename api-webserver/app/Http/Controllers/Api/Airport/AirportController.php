@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class AirportController extends Controller
 {
     /**
-     * Display a listing of papers
+     * Display a listing of elements
      *
      * @return array
      */
@@ -19,7 +19,7 @@ class AirportController extends Controller
     {
         $auth_user = Auth::user();
 
-        if (!$auth_user->hasPermissionTo('preventivi/parameters/list')) {
+        if (!$auth_user->hasPermissionTo('airports/airports-manage/list')) {
             return [
                 "success" => false,
                 "message" => "Insufficient permission",
@@ -47,13 +47,13 @@ class AirportController extends Controller
     {
         $auth_user = Auth::user();
 
-        if (!$auth_user->hasPermissionTo('preventivi/parameters/add')) {
+        if (!$auth_user->hasPermissionTo('airports/airports-manage/add')) {
             return [
                 "success" => false,
                 "message" => "Insufficient permission",
             ];
         }
-        $istance = new AirportRequest();
+        $instance = new Airport();
 
 
         if (count($request->getValidationError())) {
@@ -64,16 +64,16 @@ class AirportController extends Controller
             ];
         }
 
-        $fill = $istance->fillable;
+        $fill = $instance->fillable;
         $request_filled = $request->only($fill);
 
-        $istance->updateStandardColumns($request_filled);
+        $instance->updateStandardColumns($request_filled);
 
 
         return [
             "success" => true,
             "message" => "",
-            "data" => !is_null($istance) ? $istance->getStandardColumns('id', true) : [],
+            "data" => !is_null($instance) ? $instance->getStandardColumns('id', true) : [],
             "info" => [
                 "form" => Airport::standardForm(),
                 "relation_list" => Airport::standardRelationList(),
@@ -93,7 +93,7 @@ class AirportController extends Controller
     public function show(int $id): array
     {
         $auth_user = Auth::user();
-        if (!$auth_user->hasPermissionTo('preventivi/parameters/view')) {
+        if (!$auth_user->hasPermissionTo('airports/airports-manage/view')) {
             return [
                 "success" => false,
                 "message" => "Insufficient permission",
@@ -125,7 +125,7 @@ class AirportController extends Controller
     {
         $auth_user = Auth::user();
 
-        if (!$auth_user->hasPermissionTo('preventivi/parameters/update')) {
+        if (!$auth_user->hasPermissionTo('airports/airports-manage/update')) {
             return [
                 "success" => false,
                 "message" => "Insufficient permission",
@@ -162,7 +162,7 @@ class AirportController extends Controller
         } else {
             return [
                 "success" => false,
-                "message" => "Invalid Paper",
+                "message" => "Invalid Element",
             ];
         }
 
@@ -178,7 +178,7 @@ class AirportController extends Controller
     {
         $auth_user = Auth::user();
 
-        if (!$auth_user->hasPermissionTo('preventivi/parameters/delete')) {
+        if (!$auth_user->hasPermissionTo('airports/airports-manage/delete')) {
             return [
                 "success" => false,
                 "message" => "Insufficient permission",

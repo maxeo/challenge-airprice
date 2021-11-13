@@ -14,10 +14,13 @@ class CreateFlightsTable extends Migration
     public function up()
     {
         Schema::create('flights', function (Blueprint $table) {
+            $table->id();
             $table->string('code_departure')->references('code')->on('airports');
             $table->string('code_arrival')->references('code')->on('airports');
             $table->decimal('price', 15, 2);
 
+            $table->foreign('code_departure')->on('airports')->references('code')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('code_arrival')->on('airports')->references('code')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

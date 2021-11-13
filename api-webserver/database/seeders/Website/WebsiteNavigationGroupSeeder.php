@@ -20,7 +20,7 @@ class WebsiteNavigationGroupSeeder extends Seeder
         ]);
 
         WebsiteNavigationGroup::create([
-            'name' => 'Preventivi',
+            'name' => 'Voli e Aeroporti',
             'position' => 2,
         ]);
 

@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Airport;
 
 use App\Http\Requests\Website\WebsiteRequest;
-use Illuminate\Validation\Rule;
 
 class FlightRequest extends WebsiteRequest
 {
@@ -17,16 +16,10 @@ class FlightRequest extends WebsiteRequest
     {
         $rules = [];
 
-        $id = $this->route()->parameter('paper');
-        if ($id > 0) {
-            //Update
-            $rules['name'] = ['required', Rule::unique('papers')->ignore($id), 'max:255'];
-            $rules['cost_mq'] = ['required', 'numeric'];
+        $rules['departure'] = ['required', 'max:255'];
+        $rules['arrival'] = ['required', 'max:255'];
+        $rules['price'] = ['required', 'numeric'];
 
-        } else {
-            $rules['name'] = ['required', 'unique:papers', 'max:255'];
-            $rules['cost_mq'] = ['required', 'numeric'];
-        }
         return $rules;
     }
 
