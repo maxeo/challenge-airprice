@@ -45,7 +45,7 @@
             <div class="modal-footer">
               <slot name="footer">
                 <button type="button" class="btn btn-secondary float-end" @click="closeModal">Chiudi</button>
-                <button class="btn btn-primary float-end" type="button" @click="addProcessing">Prenota</button>
+                <button class="btn btn-primary float-end" type="button" @click="bookFlights">Prenota</button>
               </slot>
             </div>
           </form>
@@ -53,6 +53,11 @@
       </div>
     </div>
   </transition>
+  <div class="row" v-if="show_loader">
+    <div class="col-12">
+      <Loader v-if="true"/>
+    </div>
+  </div>
   <div v-for="modal in alert_requests">
     <ModalAlert
         @remove-unused-modal-alert="removeUnusedModalAlert"
@@ -64,17 +69,14 @@
         @close_callback="closeModal"
     />
   </div>
-  <div class="row" v-if="loader">
-    <div class="col-12">
-      <Loader/>
-    </div>
-  </div>
+
 </template>
 
 <script>
 import Multiselect from '@vueform/multiselect'
 import ModalAlert from "../ModalAlert";
 import Loader from "../Loader";
+import {apiFetch} from "../../helper/utility";
 
 export default {
   components: {Loader, ModalAlert, Multiselect},
@@ -88,7 +90,7 @@ export default {
   },
   data() {
     return {
-      loader: false,
+      show_loader: false,
       alert_requests: [],
       active_trip: false,
     }
@@ -112,6 +114,42 @@ export default {
     closeModal() {
       this.active_trip = false;
       this.modal_data.show_modal = false;
+    },
+    bookFlights() {
+      this.show_loader = true;
+      apiFetch(this.$apibase + '/airport/book-flight', {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+              "trip": this.active_trip,
+            }),
+          }, json => {
+            this.show_loader = false;
+            this.alert_requests.push({
+              title: "Prenotazione effettuata con successo",
+              body: `Grazie di aver prenotato il tuo volo`,
+              show_modal: true,
+              close_callback: this.closeModal,
+            },);
+          }, () => {
+            this.alert_requests.push({
+              title: "Codice Risposta non Previsto",
+              body: `Errore nella richiesta`,
+              show_modal: true
+            },);
+            this.show_loader = false;
+          },
+          () => {
+            this.alert_requests.push({
+              title: "Errore",
+              body: `Errore nella richiesta`,
+              show_modal: true
+            },);
+            this.show_loader = false;
+          });
     },
   },
   beforeMount() {

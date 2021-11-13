@@ -40,12 +40,7 @@ Route::post('login/', [AuthController::class, 'login']);
 
 Route::get('/airport/list', [GeneralAirportController::class, 'getAirportList']);
 Route::post('/airport/check-flights', [GeneralAirportController::class, 'checkFlights']);
-
-
-
-
-
-
+Route::post('/airport/book-flight', [GeneralAirportController::class, 'bookFlight']);
 
 
 #########################################################################
@@ -67,6 +62,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     Route::get('navigation/', [NavigationController::class, 'getAvailable']);
+    Route::get('info/dashboard/', [GeneralAirportController::class, 'getDashboard']);
 
 
     #############################################

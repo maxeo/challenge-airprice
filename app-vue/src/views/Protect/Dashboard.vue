@@ -33,7 +33,7 @@
                             </div>
                           </div>
                         </div>
-                        <h1 class="mt-1 mb-3">398</h1>
+                        <h1 class="mt-1 mb-3">{{ getDashboardData('search_counter') ?? '...' }}</h1>
                       </div>
                     </div>
                   </div>
@@ -51,75 +51,11 @@
                             </div>
                           </div>
                         </div>
-                        <h1 class="mt-1 mb-3">274</h1>
+                        <h1 class="mt-1 mb-3">{{ getDashboardData('book_counter') ?? '...' }}</h1>
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-12 mt-4" v-if="info?.user_permissions?.indexOf('preventivi/history/view') > -1">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col mt-0">
-                            <h5 class="card-title">Ultimi preventivi</h5>
-                          </div>
-
-                          <div class="col-auto">
-                            <div class="stat text-primary mb-1">
-                              <i class="dash-icon fal fa-money-check"></i>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="table-responsive">
-                          <table class="table table-sm table-bordered text-center table-hover table-striped">
-                            <thead class="table-dark">
-                            <tr>
-                              <th>Cliente</th>
-                              <th>Data</th>
-                              <th>Formato</th>
-                              <th>Quantità</th>
-                              <th>Dettagli generali</th>
-                              <th>Totale preventivo</th>
-                              <th>Totale cad</th>
-                              <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                              <td>Azienda Agricola Prova</td>
-                              <td>30/02/2020</td>
-                              <td>120x200</td>
-                              <td>12.000</td>
-                              <td>Stampa K + Pantone + Serigrafia</td>
-                              <td>2.640 €</td>
-                              <td>0,22 cad</td>
-                              <td>
-                                <button class="btn btn-success btn-sm me-1" type="button"><i class="fal fa-edit"></i> Modifica</button>
-                                <button class="btn btn-success btn-danger btn-sm" type="button"><i class="fal fa-file-pdf"></i> Scarica PDF</button>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>Poggio alla Valle</td>
-                              <td>31/04/2021</td>
-                              <td>120x80</td>
-                              <td>20.000</td>
-                              <td>Stampa C + Stampa M + Stampa Y + Stampa K</td>
-                              <td>1.440 €</td>
-                              <td>0,12 cad</td>
-                              <td>
-                                <button class="btn btn-success btn-sm me-1" type="button"><i class="fal fa-edit"></i> Modifica</button>
-                                <button class="btn btn-success btn-danger btn-sm" type="button"><i class="fal fa-file-pdf"></i> Scarica PDF</button>
-                              </td>
-                            </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="float-end">
-                          <router-link to="/storico-preventivi">Vedi altri</router-link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -138,7 +74,7 @@
 
 <script>
 
-import {setTitle} from "../../helper/utility";
+import {apiFetch, setTitle} from "../../helper/utility";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -151,10 +87,13 @@ export default {
     Sidebar
   },
   data() {
-    return {};
+    return {
+      dashboard_data: [],
+    };
   },
   beforeMount() {
     this.$emit('check-authenticate');
+    this.downloadDashboardData()
   },
   props: {
     access_token: String,
@@ -164,7 +103,28 @@ export default {
     is_logged: Boolean,
 
   },
-  methods: {},
+  methods: {
+    getDashboardData(data_key) {
+      let r = this.dashboard_data.filter(e => e.key_name === data_key);
+      return r.length ? r[0].key_value : undefined;
+    },
+    downloadDashboardData() {
+      if (this.info?.user_permissions?.indexOf('dashboard/view') > -1) {
+        apiFetch(this.$apibase + '/info/dashboard/', {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+            "Authorization": "Bearer " + this.access_token,
+          },
+        }, response => {
+          if (response.success) {
+            this.dashboard_data = response.data;
+          }
+        })
+      }
+    },
+  },
   setup(props, {emit}) {
     setTitle();
   },

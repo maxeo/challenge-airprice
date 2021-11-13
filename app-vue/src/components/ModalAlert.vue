@@ -8,7 +8,9 @@
             <button type="button" class="btn-close" @click="closeModal"></button>
           </div>
           <div class="modal-body text-center">
-            <slot name="body"><div v-html="body"></div></slot>
+            <slot name="body">
+              <div v-html="body"></div>
+            </slot>
           </div>
           <div class="modal-footer">
             <slot name="footer">
@@ -29,11 +31,9 @@ export default {
     title: String,
     body: String,
     close_callback: {
-      type: Boolean,
       default: false,
     },
     confirm_callback: {
-      type: Boolean,
       default: false,
     },
     close_btn: {
@@ -59,7 +59,7 @@ export default {
   methods: {
     closeModal() {
       if (this.close_callback) {
-        this.$emit('close_callback');
+        this.close_callback();
       }
       this.$emit('remove-unused-modal-alert');
       this.$emit('close');

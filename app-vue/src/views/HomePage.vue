@@ -150,7 +150,7 @@ export default {
     },
   },
   setup() {
-    setTitle('Pagina non trovata', false);
+    setTitle('Prenota il tuo volo ad un prezzo unico');
   },
   beforeCreate() {
     apiFetch(this.$apibase + '/airport/list', {}, (response) => {

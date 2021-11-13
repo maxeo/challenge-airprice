@@ -2,8 +2,10 @@
 
 namespace App\Models\Website;
 
+use App\Models\Airport\AirStat;
 use App\Models\Helper\PermissionsHelper;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -40,6 +42,19 @@ class WebsiteUtility
         }
         return $res;
 
+    }
+
+    /**
+     * @return Collection
+     */
+    static function getDashboardData(): Collection
+    {
+        $auth_user = Auth::user();
+        if ($auth_user->hasPermissionTo('dashboard/view')) {
+            return AirStat::whereIn('key_name', ['search_counter', 'book_counter'])->get();
+        } else {
+            return new Collection();
+        }
     }
 
 }
