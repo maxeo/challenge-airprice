@@ -135,7 +135,7 @@ class Flight extends Model
                     ->where('f.code_departure', '=', $code_departure)
                     ->where('f2.code_arrival', '=', $code_arrival)
                     ->where('f1.code_departure', '!=', $code_arrival)
-                    ->where('f1.code_arrival', '=', $code_departure)
+                    ->where('f1.code_arrival', '!=', $code_departure)
             )->orderBy('price');
 
         return $query->get();
