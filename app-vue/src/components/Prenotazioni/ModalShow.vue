@@ -189,6 +189,7 @@ export default {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  overflow-y: auto;
 }
 
 .modal-header h3 {

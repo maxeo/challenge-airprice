@@ -164,10 +164,15 @@ export default {
 
 <style scoped>
 .main-bg {
-  height: 100vh;
   margin: 0;
   background-image: url("~@/assets/NYNF.jpg");
   background-size: cover;
+}
+
+@media (min-height: 430px) {
+  .main-bg {
+    height: 100vh;
+  }
 }
 
 .message-flex {
