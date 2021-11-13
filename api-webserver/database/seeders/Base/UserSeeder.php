@@ -17,16 +17,16 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
-            'first_name' => 'Matteo',
-            'last_name' => 'Burbui',
-            'username' => "superadmin",
-            'email' => 'info@maxeo.net',
-            'email_verified_at' => now(),
-            'password' => Hash::make('super'),
-            'remember_token' => Str::random(10),
-        ]);
-        $user->syncRoles(['Super Amministratore']);
+//        $user = User::create([
+//            'first_name' => 'Matteo',
+//            'last_name' => 'Burbui',
+//            'username' => "superadmin",
+//            'email' => 'info@maxeo.net',
+//            'email_verified_at' => now(),
+//            'password' => Hash::make('super'),
+//            'remember_token' => Str::random(10),
+//        ]);
+//        $user->syncRoles(['Super Amministratore']);
 
 
         $user = User::create([
