@@ -80,12 +80,25 @@ const routes = [
     }
 ]
 
+
 const router = createRouter({
     history: createWebHistory(),
     routes
 });
 
-router.getByName = name => router.hasRoute(name) ? router.getRoutes().filter(r => r.name === name)[0].path : false;
+router.getByName = (name, fail_go_to_404_route = true) => {
+    if (router.hasRoute(name)) {
+        let r = router.getRoutes().filter(r => r.name === name)
+        if (r.length) {
+            return r[0].path;
+        }
+    }
+
+    if (fail_go_to_404_route) {
+        return '/404';
+    }
+    return false;
+};
 
 
 export default router

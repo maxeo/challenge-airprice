@@ -45,7 +45,7 @@ export default {
         }
 
         if (el.parent_id === null) {
-          if (el.link === this.$route.path) {
+          if (this.$router.getByName(el.link, false) === this.$route.path) {
             el.is_active = true;
           } else {
             el.is_active = false;
@@ -62,7 +62,7 @@ export default {
 
         for (let i in navLinks) {
           if (navLinks[i].id === children.parent_id) {
-            if (children.link === this.$route.path) {
+            if (this.$router.getByName(children.link, false) === this.$route.path) {
               children.is_active = true;
               navLinks[i].active_cildren = true;
             } else {
