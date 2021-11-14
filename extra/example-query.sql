@@ -10,7 +10,7 @@ SELECT * FROM(
         IF(f1.code_arrival IS NULL, 0, 1) AS stopovers,
         IF(f1.code_arrival IS NULL, f.price, f.price + f1.price) AS price
     FROM
-        flights f	LEFT JOIN flights f1 ON f1.code_departure = f.code_arrival 	AND f1.code_arrival = 'selected_arrival'
+        flights f LEFT JOIN flights f1 ON f1.code_departure = f.code_arrival  AND f1.code_arrival = 'selected_arrival'
     WHERE
         1 = 1
         AND f.code_departure = 'selected_departure'
